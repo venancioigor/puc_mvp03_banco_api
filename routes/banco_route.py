@@ -67,6 +67,57 @@ def get_banco_by_id():
     return jsonify(banco_serializado)
 
     
+@bancos.route('/atualizarBanco/', methods=['PUT'])
+@swag_from('../docs/banco/atualizarBanco.yaml')
+def atualizar_banco():
+    try:
+        data = request.json
+        id_banco = data['id_banco']
+        novo_nome = data['novo_nome']
+
+        if id_banco is None:
+            return jsonify({'error':'Id do banco é necessário'})
+        if novo_nome is None:
+            return jsonify({'error':'Novo nome necessário'})
+
+        banco = BancoModel.query.get(id_banco)
+        if banco is None:
+            return jsonify({'error': 'Banco não encontrado'}), 404
+
+        banco.nome = novo_nome
+        db.session.commit()
+
+    except Exception as e:
+        traceback.print_exc()
+        db.session.rollback()
+        return jsonify({'error': 'Erro ao atualizar banco.'}), 500
+
+    return jsonify({'message': 'Banco atualizado com sucesso.'}), 200
+
+
+@bancos.route('/excluirBanco', methods=['DELETE'])
+@swag_from('../docs/banco/excluirBanco.yaml')
+def excluir_banco():
+    try:
+        data = request.json
+        id_banco = data['banco_id']
+
+        if id_banco is None:
+            return jsonify({'error':'Id do banco é necessário'})
+
+        banco = BancoModel.query.get(id_banco)
+        if banco is None:
+            return jsonify({'error': 'Banco não encontrado'}), 404
+
+        db.session.delete(banco)
+        db.session.commit()
+
+    except Exception as e:
+        traceback.print_exc()
+        db.session.rollback()
+        return jsonify({'error': 'Erro ao excluir banco.'}), 500
+
+    return jsonify({'message': 'Banco excluído com sucesso.'}), 200
 
 
 

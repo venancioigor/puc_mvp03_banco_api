@@ -1,8 +1,8 @@
 template = {
     "swagger": "2.0",
     "info": {
-        "title": "Cofre API",
-        "description": "Meu Cofre",
+        "title": "Banco API",
+        "description": "Informações de bancos",
         "contact": {
             "responsibleDeveloper": "Igor Venancio",
             "email": "igorvmfreitas@gmail.com",

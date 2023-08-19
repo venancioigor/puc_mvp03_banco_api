@@ -6,6 +6,7 @@ from config.swagger import template, swagger_config
 from routes.banco_route import bancos
 
 app = Flask(__name__)
+port = 5000
 CORS(app)
 
 
@@ -27,8 +28,10 @@ ma.init_app(app)
 # Registrando endpoints
 app.register_blueprint(bancos)
 
+
 # Executar o aplicativo Flask
 if __name__ == '__main__':
-    db.create_all()
-    app.run(debug=True)
+    with app.app_context():
+        db.create_all()
+        app.run(host="0.0.0.0", port=port)
 
